@@ -13,17 +13,7 @@ public interface ISignupView {
 
     void updateAvatar(String image);
 
-    void setLastName(String lastName);
-
-    void setEmail(String email);
-
-    void setPhoneNumber(String phoneNumber);
-
     void onError(String message);
-
-    void setFirstName(String firstName);
-
-    void setMiddleName(String middleName);
 
     void takePhoto(Intent intent, int i);
 

@@ -14,9 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.example.who.doittest.R;
 import com.example.who.doittest.interfaces.ISignupView;
@@ -166,32 +164,7 @@ public class SignupActivity extends AppCompatActivity  implements ISignupView {
     }
 
     @Override
-    public void setLastName(String lastName) {
-
-    }
-
-    @Override
-    public void setEmail(String email) {
-
-    }
-
-    @Override
-    public void setPhoneNumber(String phoneNumber) {
-
-    }
-
-    @Override
     public void onError(String message) {
-
-    }
-
-    @Override
-    public void setFirstName(String firstName) {
-
-    }
-
-    @Override
-    public void setMiddleName(String middleName) {
 
     }
 
