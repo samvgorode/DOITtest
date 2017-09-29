@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import com.example.who.doittest.controller.RestManager;
 import com.example.who.doittest.interfaces.ISignupView;
+import com.example.who.doittest.utils.FileUtils;
+import com.example.who.doittest.utils.PermissionUtils;
 import com.orhanobut.hawk.Hawk;
 
 import org.json.JSONException;
@@ -37,7 +39,6 @@ public class SignupActivityPresenter {
 
     private Context context;
     private ISignupView view;
-    private String strManufacturer = android.os.Build.MANUFACTURER;
     private boolean isUpdatedAvatar;
     private RestManager restManager;
     private Call<ResponseBody> signUpCall;
@@ -49,17 +50,8 @@ public class SignupActivityPresenter {
     }
 
     public void getPhotoFromSD() {
-        Intent intent;
-        if (strManufacturer.equals("samsung")) {
-            intent = new Intent("com.sec.android.app.myfiles.PICK_DATA");
-            intent.putExtra("CONTENT_TYPE", "image/*");
-            intent.addCategory(Intent.CATEGORY_DEFAULT);
-        } else {
-            intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("image/*");
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-        }
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        Intent intent = FileUtils.getImageIntent();
+        if (PermissionUtils.isEnabledStorageAccess(context)) {
             view.takePhoto(intent, CHOOSE_OPEN_PHOTO);
         } else view.setStorageEnabled();
     }

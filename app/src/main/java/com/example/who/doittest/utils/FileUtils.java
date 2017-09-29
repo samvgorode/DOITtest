@@ -32,20 +32,18 @@ public class FileUtils {
 
     private FileUtils() {} //private constructor to enforce Singleton pattern
 
-    public static MultipartBody.Part uploadImage(String filePath, String param) {
-
-        MultipartBody.Part body = null;
-        try {
-            body = MultipartBody.Part.createFormData("", "", null);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static Intent getImageIntent() {
+        String strManufacturer = android.os.Build.MANUFACTURER;
+        Intent intent;
+        if (strManufacturer.equals("samsung")) {
+            intent = new Intent("com.sec.android.app.myfiles.PICK_DATA");
+            intent.putExtra("CONTENT_TYPE", "image/*");
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+        } else {
+            intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
         }
-        //profileUpdateRequest.setWebsite(lblWebsite.getText().toString().trim());
-        if ((!filePath.equals(""))) {
-            File file = new File(filePath);
-            RequestBody photo = RequestBody.create(MediaType.parse("image/*"), file);
-            body = MultipartBody.Part.createFormData(param, file.getName(), photo);
-        }
-        return body;
+        return intent;
     }
 }

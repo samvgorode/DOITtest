@@ -9,11 +9,12 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.who.doittest.R;
+import com.example.who.doittest.interfaces.IGalleryView;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class GalleryActivity extends AppCompatActivity {
+public class GalleryActivity extends AppCompatActivity implements IGalleryView{
 
     public static Intent getNewIntent(Context context) {
         Intent intent = new Intent(context, GalleryActivity.class);
@@ -53,7 +54,7 @@ public class GalleryActivity extends AppCompatActivity {
     }
 
     void addNewImage(){
-
+        startActivity(AddImageActivity.getNewIntent(this));
     }
 
     void showGif(){

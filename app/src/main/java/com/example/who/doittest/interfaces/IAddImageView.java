@@ -4,18 +4,18 @@ import android.content.Intent;
 import android.net.Uri;
 
 /**
- * Created by who on 28.09.2017.
+ * Created by who on 29.09.2017.
  */
 
-public interface ISignupView {
+public interface IAddImageView {
 
-    void updateAvatar(Uri image);
+    void onAddImageSuccess();
+
+    void onAddImageFailure();
 
     void takePhoto(Intent intent, int i);
 
     void setStorageEnabled();
 
-    void onSignupSuccess();
-
-    void onSignupFailed();
+    void updatePlaceholder(Uri uri);
 }

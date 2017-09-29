@@ -21,6 +21,8 @@ import com.bumptech.glide.Glide;
 import com.example.who.doittest.R;
 import com.example.who.doittest.interfaces.ISignupView;
 import com.example.who.doittest.presenter.SignupActivityPresenter;
+import com.example.who.doittest.utils.PermissionUtils;
+
 import java.io.File;
 
 import butterknife.BindView;
@@ -66,6 +68,12 @@ public class SignupActivity extends AppCompatActivity implements ISignupView {
         setStorageEnabled();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setStorageEnabled();
+    }
+
     @OnClick(R.id.link_login)
     public void GoToLogin() {
         startActivity(LoginActivity.getNewIntent(this));
@@ -84,7 +92,6 @@ public class SignupActivity extends AppCompatActivity implements ISignupView {
             onSignupFailed();
             return;
         }
-
         signupButton.setEnabled(false);
         progress.setVisibility(View.VISIBLE);
         final String name = nameText.getText().toString();
@@ -167,8 +174,6 @@ public class SignupActivity extends AppCompatActivity implements ISignupView {
 
     @Override
     public void setStorageEnabled() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-        }
+        PermissionUtils.checkStoragePermissions(this);
     }
 }
