@@ -34,6 +34,8 @@ import okhttp3.RequestBody;
 
 public class SignupActivity extends AppCompatActivity implements ISignupView {
 
+    private static final String TXT_PLAIN = "text/plain";
+    private static final String IMG = "image";
     @BindView(R.id.input_name)
     EditText nameText;
     @BindView(R.id.avatar)
@@ -93,15 +95,15 @@ public class SignupActivity extends AppCompatActivity implements ISignupView {
         final String email = emailText.getText().toString();
         final String password = passwordText.getText().toString();
         if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) && imageUri != null) {
-            File file = new File(imageUri.getPath());
-            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
-            final MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
-            final RequestBody avatar = RequestBody.create(MediaType.parse("text/plain"), "avatar");
-
+            final RequestBody nameBody = RequestBody.create(okhttp3.MediaType.parse(TXT_PLAIN), name);
+            final RequestBody emailBody = RequestBody.create(okhttp3.MediaType.parse(TXT_PLAIN), email);
+            final RequestBody passwordBody = RequestBody.create(okhttp3.MediaType.parse(TXT_PLAIN), password);
+            final File file = new File(imageUri.getPath());
+            final RequestBody reqFile = RequestBody.create(MediaType.parse(IMG), file);
             new android.os.Handler().postDelayed(
                     new Runnable() {
                         public void run() {
-                            presenter.registerUser(name, email, password, body, avatar);
+                            presenter.registerUser(nameBody, emailBody, passwordBody, reqFile);
                             progressDialog.dismiss();
                         }
                     }, 3000);

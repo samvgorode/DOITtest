@@ -12,6 +12,8 @@ import android.widget.Toast;
 import com.example.who.doittest.controller.RestManager;
 import com.example.who.doittest.interfaces.ISignupView;
 
+import java.io.File;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -66,8 +68,8 @@ public class SignupActivityPresenter {
         }
     }
 
-    public void registerUser(String username, String email, String password, MultipartBody.Part file, RequestBody avatar) {
-        userCall = restManager.getDoItService().createUser(username, email, password, file, avatar);
+    public void registerUser(RequestBody username, RequestBody email, RequestBody password, RequestBody avatar) {
+        userCall = restManager.getDoItService().createUser(username, email, password, avatar/*, file*/);
         userCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

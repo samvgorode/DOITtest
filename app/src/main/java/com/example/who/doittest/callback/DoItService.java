@@ -1,6 +1,8 @@
 package com.example.who.doittest.callback;
 
 
+import java.io.File;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -18,11 +20,12 @@ public interface DoItService {
     @Multipart
     @POST("/create")
     Call<ResponseBody> createUser(
-            @Part("username") String username,
-            @Part("email") String email,
-            @Part("password") String password,
-            @Part MultipartBody.Part file,
+            @Part("username") RequestBody username,
+            @Part("email") RequestBody email,
+            @Part("password") RequestBody password,
             @Part("avatar") RequestBody avatar
+//            @Part("avatar") RequestBody avatar,
+//            @Part MultipartBody.Part file
     );
 
 //    @GET("/orgs/{org}")
