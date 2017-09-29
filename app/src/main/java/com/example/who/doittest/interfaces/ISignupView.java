@@ -10,13 +10,11 @@ import android.net.Uri;
 
 public interface ISignupView {
 
-    void logOut();
-
     void updateAvatar(Uri image);
 
     void takePhoto(Intent intent, int i);
 
-    void setStaregeEnabled();
+    void setStorageEnabled();
 
     void onSignupSuccess();
 

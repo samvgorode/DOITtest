@@ -1,7 +1,6 @@
 package com.example.who.doittest.ui;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,8 +11,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -28,9 +29,10 @@ import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
+import static com.example.who.doittest.global.Constants.TXT_PLAIN;
+
 public class SignupActivity extends AppCompatActivity implements ISignupView {
 
-    private static final String TXT_PLAIN = "text/plain";
     private static final String IMG = "image/*";
     @BindView(R.id.input_name)
     EditText nameText;
@@ -42,8 +44,10 @@ public class SignupActivity extends AppCompatActivity implements ISignupView {
     EditText passwordText;
     @BindView(R.id.btn_signup)
     Button signupButton;
+    @BindView(R.id.progress)
+    ProgressBar progress;
 
-    private static final String TAG = "SignupActivity";
+    private static final String TAG = SignupActivity.class.getSimpleName();
     private SignupActivityPresenter presenter;
     private Uri imageUri = null;
 
@@ -58,7 +62,7 @@ public class SignupActivity extends AppCompatActivity implements ISignupView {
         setContentView(R.layout.activity_signup);
         ButterKnife.bind(this);
         presenter = new SignupActivityPresenter(SignupActivity.this, this);
-        setStaregeEnabled();
+        setStorageEnabled();
     }
 
     @OnClick(R.id.link_login)
@@ -81,13 +85,7 @@ public class SignupActivity extends AppCompatActivity implements ISignupView {
         }
 
         signupButton.setEnabled(false);
-
-        //TODO change to normal dialog
-        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
-                R.style.AppTheme);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Creating Account...");
-        progressDialog.show();
+        progress.setVisibility(View.VISIBLE);
         final String name = nameText.getText().toString();
         final String email = emailText.getText().toString();
         final String password = passwordText.getText().toString();
@@ -101,7 +99,7 @@ public class SignupActivity extends AppCompatActivity implements ISignupView {
                     new Runnable() {
                         public void run() {
                             presenter.registerUser(nameBody, emailBody, passwordBody, reqFile);
-                            progressDialog.dismiss();
+                            progress.setVisibility(View.GONE);
                         }
                     }, 3000);
         }
@@ -153,11 +151,6 @@ public class SignupActivity extends AppCompatActivity implements ISignupView {
     }
 
     @Override
-    public void logOut() {
-
-    }
-
-    @Override
     public void updateAvatar(Uri image) {
         imageUri = image;
         Glide.with(this)
@@ -172,7 +165,7 @@ public class SignupActivity extends AppCompatActivity implements ISignupView {
     }
 
     @Override
-    public void setStaregeEnabled() {
+    public void setStorageEnabled() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         }

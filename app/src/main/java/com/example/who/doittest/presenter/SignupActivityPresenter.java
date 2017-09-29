@@ -29,7 +29,7 @@ public class SignupActivityPresenter {
     private String strManufacturer = android.os.Build.MANUFACTURER;
     private boolean isUpdatedAvatar;
     private RestManager restManager;
-    private Call<ResponseBody> userCall;
+    private Call<ResponseBody> signUpCall;
 
     public SignupActivityPresenter(Context context, ISignupView view) {
         this.context = context;
@@ -50,7 +50,7 @@ public class SignupActivityPresenter {
         }
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             view.takePhoto(intent, CHOOSE_OPEN_PHOTO);
-        } else view.setStaregeEnabled();
+        } else view.setStorageEnabled();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -64,16 +64,14 @@ public class SignupActivityPresenter {
     }
 
     public void registerUser(RequestBody username, RequestBody email, RequestBody password, RequestBody avatar) {
-        userCall = restManager.getDoItService().createUser(username, email, password, avatar/*, file*/);
-        userCall.enqueue(new Callback<ResponseBody>() {
+        signUpCall = restManager.getDoItService().createUser(username, email, password, avatar/*, file*/);
+        signUpCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     view.onSignupSuccess();
-                    Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
                 } else {
                     view.onSignupFailed();
-                    Toast.makeText(context, "Not Success", Toast.LENGTH_SHORT).show();
                 }
             }
 

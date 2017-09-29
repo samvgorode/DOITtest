@@ -1,26 +1,35 @@
 package com.example.who.doittest.ui;
 
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 
 import android.content.Intent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.who.doittest.R;
+import com.example.who.doittest.interfaces.ILoginView;
+import com.example.who.doittest.presenter.LoginActivityPresenter;
+import com.example.who.doittest.presenter.SignupActivityPresenter;
+
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
-public class LoginActivity extends AppCompatActivity {
-    private static final String TAG = "LoginActivity";
-    private static final int REQUEST_SIGNUP = 0;
+import static com.example.who.doittest.global.Constants.TXT_PLAIN;
+
+public class LoginActivity extends AppCompatActivity implements ILoginView {
 
     @BindView(R.id.input_email)
     EditText emailText;
@@ -28,6 +37,12 @@ public class LoginActivity extends AppCompatActivity {
     EditText passwordText;
     @BindView(R.id.btn_login)
     Button loginButton;
+    @BindView(R.id.progress)
+    ProgressBar progress;
+
+    private static final String TAG = LoginActivity.class.getSimpleName();
+    private LoginActivityPresenter presenter;
+    private static final int REQUEST_SIGNUP = 0;
 
     public static Intent getNewIntent(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
@@ -39,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        presenter = new LoginActivityPresenter(LoginActivity.this, this);
     }
 
     @OnClick(R.id.link_signup)
@@ -55,28 +71,20 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         loginButton.setEnabled(false);
-        
-        //TODO change to normal dialog
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
-
+        progress.setVisibility(View.VISIBLE);
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
-
-        // TODO: Implement your own authentication logic here.
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
-                        // onLoginFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+        if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
+            final RequestBody emailBody = RequestBody.create(okhttp3.MediaType.parse(TXT_PLAIN), email);
+            final RequestBody passwordBody = RequestBody.create(okhttp3.MediaType.parse(TXT_PLAIN), password);
+            new android.os.Handler().postDelayed(
+                    new Runnable() {
+                        public void run() {
+                            presenter.loginUser(emailBody, passwordBody);
+                            progress.setVisibility(View.GONE);
+                        }
+                    }, 3000);
+        }
     }
 
 
@@ -97,16 +105,6 @@ public class LoginActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    public void onLoginSuccess() {
-        loginButton.setEnabled(true);
-        finish();
-    }
-
-    public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-        loginButton.setEnabled(true);
-    }
-
     public boolean validate() {
         boolean valid = true;
         String email = emailText.getText().toString();
@@ -124,5 +122,18 @@ public class LoginActivity extends AppCompatActivity {
             passwordText.setError(null);
         }
         return valid;
+    }
+
+
+    @Override
+    public void onLoginSuccess() {
+        loginButton.setEnabled(true);
+        finish();
+    }
+
+    @Override
+    public void onLoginFailed() {
+        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        loginButton.setEnabled(true);
     }
 }

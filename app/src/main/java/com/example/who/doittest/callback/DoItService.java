@@ -26,6 +26,13 @@ public interface DoItService {
             @Part("avatar") RequestBody avatar
     );
 
+    @Multipart
+    @POST("/login")
+    Call<ResponseBody> loginUser(
+            @Part("email") RequestBody email,
+            @Part("password") RequestBody password
+    );
+
 //    @GET("/orgs/{org}")
 //    Call<Organization> getOrganization(@Header("Authorization") String token, @Header("Accept") String accept, @Path("org") String orgname);
 //
