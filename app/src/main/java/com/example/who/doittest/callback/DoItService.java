@@ -23,7 +23,7 @@ public interface DoItService {
             @Part("username") RequestBody username,
             @Part("email") RequestBody email,
             @Part("password") RequestBody password,
-            @Part("avatar") RequestBody avatar
+            @Part MultipartBody.Part body
     );
 
     @Multipart

@@ -7,4 +7,5 @@ package com.example.who.doittest.global;
 public class Constants {
     public static final int CHOOSE_OPEN_PHOTO = 103;
     public static final String TXT_PLAIN = "text/plain";
+    public static final String TOKEN = "token";
 }

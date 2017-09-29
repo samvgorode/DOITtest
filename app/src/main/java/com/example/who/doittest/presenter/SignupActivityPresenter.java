@@ -7,9 +7,19 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.widget.Toast;
+
 import com.example.who.doittest.controller.RestManager;
 import com.example.who.doittest.interfaces.ISignupView;
+import com.orhanobut.hawk.Hawk;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -17,6 +27,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.example.who.doittest.global.Constants.CHOOSE_OPEN_PHOTO;
+import static com.example.who.doittest.global.Constants.TOKEN;
 
 /**
  * Created by who on 28.09.2017.
@@ -63,12 +74,20 @@ public class SignupActivityPresenter {
         }
     }
 
-    public void registerUser(RequestBody username, RequestBody email, RequestBody password, RequestBody avatar) {
-        signUpCall = restManager.getDoItService().createUser(username, email, password, avatar/*, file*/);
+    public void registerUser(RequestBody username, RequestBody email, RequestBody password, MultipartBody.Part body) {
+        signUpCall = restManager.getDoItService().createUser(username, email, password, body/*, file*/);
         signUpCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body() != null) {
+                    String token = "";
+                    try {
+                        JSONObject resp = new JSONObject(response.body().toString());
+                        if (resp.has(TOKEN)) token = resp.getString(TOKEN);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    if (!TextUtils.isEmpty(token)) Hawk.put(TOKEN, token.trim());
                     view.onSignupSuccess();
                 } else {
                     view.onSignupFailed();

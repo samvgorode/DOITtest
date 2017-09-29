@@ -92,9 +92,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
-                // TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
-                this.finish();
+                onLoginSuccess();
             }
         }
     }
@@ -128,6 +126,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     @Override
     public void onLoginSuccess() {
         loginButton.setEnabled(true);
+        startActivity(GalleryActivity.getNewIntent(this));
         finish();
     }
 

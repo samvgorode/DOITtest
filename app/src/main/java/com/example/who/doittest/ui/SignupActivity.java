@@ -27,6 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 import static com.example.who.doittest.global.Constants.TXT_PLAIN;
@@ -93,12 +94,12 @@ public class SignupActivity extends AppCompatActivity implements ISignupView {
             final RequestBody nameBody = RequestBody.create(okhttp3.MediaType.parse(TXT_PLAIN), name);
             final RequestBody emailBody = RequestBody.create(okhttp3.MediaType.parse(TXT_PLAIN), email);
             final RequestBody passwordBody = RequestBody.create(okhttp3.MediaType.parse(TXT_PLAIN), password);
-            final File file = new File(imageUri.getPath());
-            final RequestBody reqFile = RequestBody.create(MediaType.parse(IMG), file);
+            File file = new File(imageUri.getPath());
+            final MultipartBody.Part body = MultipartBody.Part.createFormData("avatar", file.getName().trim(), RequestBody.create(MediaType.parse("image/*"), file));
             new android.os.Handler().postDelayed(
                     new Runnable() {
                         public void run() {
-                            presenter.registerUser(nameBody, emailBody, passwordBody, reqFile);
+                            presenter.registerUser(nameBody, emailBody, passwordBody, body);
                             progress.setVisibility(View.GONE);
                         }
                     }, 3000);
