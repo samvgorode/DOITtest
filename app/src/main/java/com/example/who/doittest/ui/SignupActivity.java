@@ -2,34 +2,37 @@ package com.example.who.doittest.ui;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.example.who.doittest.R;
 import com.example.who.doittest.interfaces.ISignupView;
 import com.example.who.doittest.presenter.SignupActivityPresenter;
+import com.example.who.doittest.utils.FileUtils;
 
 import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
-public class SignupActivity extends AppCompatActivity  implements ISignupView {
-
-    private static final String TAG = "SignupActivity";
-    private SignupActivityPresenter presenter;
+public class SignupActivity extends AppCompatActivity implements ISignupView {
 
     @BindView(R.id.input_name)
     EditText nameText;
@@ -41,6 +44,10 @@ public class SignupActivity extends AppCompatActivity  implements ISignupView {
     EditText passwordText;
     @BindView(R.id.btn_signup)
     Button signupButton;
+
+    private static final String TAG = "SignupActivity";
+    private SignupActivityPresenter presenter;
+    private Uri imageUri = null;
 
     public static Intent getNewIntent(Context context) {
         Intent intent = new Intent(context, SignupActivity.class);
@@ -57,7 +64,7 @@ public class SignupActivity extends AppCompatActivity  implements ISignupView {
     }
 
     @OnClick(R.id.link_login)
-    public void GoToLogin(){
+    public void GoToLogin() {
         startActivity(LoginActivity.getNewIntent(this));
         finish();
     }
@@ -82,33 +89,36 @@ public class SignupActivity extends AppCompatActivity  implements ISignupView {
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Creating Account...");
         progressDialog.show();
+        final String name = nameText.getText().toString();
+        final String email = emailText.getText().toString();
+        final String password = passwordText.getText().toString();
+        if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) && imageUri != null) {
+            File file = new File(imageUri.getPath());
+            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+            final MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
+            final RequestBody avatar = RequestBody.create(MediaType.parse("text/plain"), "avatar");
 
-        String name = nameText.getText().toString();
-        String email = emailText.getText().toString();
-        String password = passwordText.getText().toString();
-
-        // TODO: Implement your own signup logic here.
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onSignupSuccess or onSignupFailed
-                        // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+            new android.os.Handler().postDelayed(
+                    new Runnable() {
+                        public void run() {
+                            presenter.registerUser(name, email, password, body, avatar);
+                            progressDialog.dismiss();
+                        }
+                    }, 3000);
+        }
     }
 
+    @Override
     public void onSignupSuccess() {
         signupButton.setEnabled(true);
+        Toast.makeText(this, "Login success", Toast.LENGTH_LONG).show();
         setResult(RESULT_OK, null);
         finish();
     }
 
+    @Override
     public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Login failed", Toast.LENGTH_LONG).show();
         signupButton.setEnabled(true);
     }
 
@@ -149,39 +159,17 @@ public class SignupActivity extends AppCompatActivity  implements ISignupView {
     }
 
     @Override
-    public void updateAvatar(String image) {
-        if (image.contains("storage") && !image.contains("file")) {
-            File file = new File(image);
-            Uri fromFile = Uri.fromFile(file);
-            Glide.with(this)
-                    .load(fromFile)
-                    .into(avatar);
-        } else {
-            Glide.with(this)
-                    .load(image)
-                    .into(avatar);
-        }
-    }
-
-    @Override
-    public void onError(String message) {
+    public void updateAvatar(Uri image) {
+        imageUri = image;
+        Glide.with(this)
+                .load(image)
+                .into(avatar);
 
     }
 
     @Override
     public void takePhoto(Intent intent, int i) {
         startActivityForResult(intent, i);
-    }
-
-
-    @Override
-    public void updateAvatar(Bitmap bitmap) {
-
-    }
-
-    @Override
-    public void saveData() {
-
     }
 
     @Override
