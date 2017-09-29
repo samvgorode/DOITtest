@@ -2,7 +2,6 @@ package com.example.who.doittest.ui;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,21 +20,18 @@ import com.bumptech.glide.Glide;
 import com.example.who.doittest.R;
 import com.example.who.doittest.interfaces.ISignupView;
 import com.example.who.doittest.presenter.SignupActivityPresenter;
-import com.example.who.doittest.utils.FileUtils;
-
 import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 public class SignupActivity extends AppCompatActivity implements ISignupView {
 
     private static final String TXT_PLAIN = "text/plain";
-    private static final String IMG = "image";
+    private static final String IMG = "image/*";
     @BindView(R.id.input_name)
     EditText nameText;
     @BindView(R.id.avatar)
@@ -86,6 +82,7 @@ public class SignupActivity extends AppCompatActivity implements ISignupView {
 
         signupButton.setEnabled(false);
 
+        //TODO change to normal dialog
         final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
                 R.style.AppTheme);
         progressDialog.setIndeterminate(true);

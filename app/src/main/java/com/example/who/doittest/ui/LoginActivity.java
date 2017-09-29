@@ -55,7 +55,8 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         loginButton.setEnabled(false);
-
+        
+        //TODO change to normal dialog
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
                 R.style.AppTheme);
         progressDialog.setIndeterminate(true);

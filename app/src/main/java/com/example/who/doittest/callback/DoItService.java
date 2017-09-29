@@ -24,8 +24,6 @@ public interface DoItService {
             @Part("email") RequestBody email,
             @Part("password") RequestBody password,
             @Part("avatar") RequestBody avatar
-//            @Part("avatar") RequestBody avatar,
-//            @Part MultipartBody.Part file
     );
 
 //    @GET("/orgs/{org}")

@@ -8,13 +8,8 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
-
 import com.example.who.doittest.controller.RestManager;
 import com.example.who.doittest.interfaces.ISignupView;
-
-import java.io.File;
-
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
