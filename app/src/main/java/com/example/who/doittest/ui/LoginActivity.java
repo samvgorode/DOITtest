@@ -99,8 +99,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
     @Override
     public void onBackPressed() {
-        // disable going back to the MainActivity
-        moveTaskToBack(true);
+        startActivity(SplashActivity.getNewIntent(this, true));
     }
 
     public boolean validate() {

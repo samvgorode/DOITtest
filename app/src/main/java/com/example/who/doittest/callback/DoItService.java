@@ -1,6 +1,8 @@
 package com.example.who.doittest.callback;
 
 
+import com.example.who.doittest.pojo.SignUpResponse;
+
 import java.io.File;
 
 import okhttp3.MultipartBody;
@@ -22,7 +24,7 @@ public interface DoItService {
 
     @Multipart
     @POST("/create")
-    Call<ResponseBody> createUser(
+    Call<SignUpResponse> createUser(
             @Part("username") RequestBody username,
             @Part("email") RequestBody email,
             @Part("password") RequestBody password,

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.who.doittest.controller.RestManager;
 import com.example.who.doittest.interfaces.ISignupView;
+import com.example.who.doittest.pojo.SignUpResponse;
 import com.example.who.doittest.utils.FileUtils;
 import com.example.who.doittest.utils.PermissionUtils;
 import com.orhanobut.hawk.Hawk;
@@ -41,7 +42,7 @@ public class SignupActivityPresenter {
     private ISignupView view;
     private boolean isUpdatedAvatar;
     private RestManager restManager;
-    private Call<ResponseBody> signUpCall;
+    private Call<SignUpResponse> signUpCall;
 
     public SignupActivityPresenter(Context context, ISignupView view) {
         this.context = context;
@@ -68,17 +69,11 @@ public class SignupActivityPresenter {
 
     public void registerUser(RequestBody username, RequestBody email, RequestBody password, MultipartBody.Part body) {
         signUpCall = restManager.getDoItService().createUser(username, email, password, body/*, file*/);
-        signUpCall.enqueue(new Callback<ResponseBody>() {
+        signUpCall.enqueue(new Callback<SignUpResponse>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<SignUpResponse> call, Response<SignUpResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    String token = "";
-                    try {
-                        JSONObject resp = new JSONObject(response.body().toString());
-                        if (resp.has(TOKEN)) token = resp.getString(TOKEN);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    String token  = response.body().getToken();
                     if (!TextUtils.isEmpty(token)) Hawk.put(TOKEN, token.trim());
                     view.onSignupSuccess();
                 } else {
@@ -87,7 +82,7 @@ public class SignupActivityPresenter {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<SignUpResponse> call, Throwable t) {
                 view.onSignupFailed();
                 Toast.makeText(context, "Failure", Toast.LENGTH_SHORT).show();
             }

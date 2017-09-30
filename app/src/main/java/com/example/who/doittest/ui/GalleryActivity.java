@@ -10,11 +10,15 @@ import android.widget.ImageView;
 
 import com.example.who.doittest.R;
 import com.example.who.doittest.interfaces.IGalleryView;
+import com.orhanobut.hawk.Hawk;
 
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
-public class GalleryActivity extends AppCompatActivity implements IGalleryView{
+import static com.example.who.doittest.global.Constants.TOKEN;
+
+public class GalleryActivity extends AppCompatActivity implements IGalleryView, View.OnClickListener {
+
+    private View customBarView;
 
     public static Intent getNewIntent(Context context) {
         Intent intent = new Intent(context, GalleryActivity.class);
@@ -34,32 +38,60 @@ public class GalleryActivity extends AppCompatActivity implements IGalleryView{
             ActionBar bar = getSupportActionBar();
             bar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
             bar.setDisplayShowCustomEnabled(true);
-            bar.setCustomView(R.layout.custom_bar);
-            View view = bar.getCustomView();
-            ImageView plus = (ImageView) view.findViewById(R.id.ivPlus);
-            ImageView play = (ImageView) view.findViewById(R.id.ivDoGif);
-            plus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    addNewImage();
-                }
-            });
-            play.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showGif();
-                }
-            });
+            bar.setCustomView(R.layout.custom_bar_gallery);
+            customBarView = bar.getCustomView();
+            setBarClickListeners();
         }
     }
 
-    void addNewImage(){
+    private void setBarClickListeners() {
+        ImageView plus = (ImageView) customBarView.findViewById(R.id.ivPlus);
+        ImageView play = (ImageView) customBarView.findViewById(R.id.ivDoGif);
+        ImageView logout = (ImageView) customBarView.findViewById(R.id.ivLogOut);
+        plus.setOnClickListener(this);
+        play.setOnClickListener(this);
+        logout.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+
+            case R.id.ivPlus:
+                addNewImage();
+                break;
+
+            case R.id.ivDoGif:
+                showGif();
+                break;
+
+            case R.id.ivLogOut:
+                doLogOut();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    void addNewImage() {
         startActivity(AddImageActivity.getNewIntent(this));
     }
 
-    void showGif(){
+    void showGif() {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(SplashActivity.getNewIntent(this, true));
+        finish();
+    }
 
+    private void doLogOut() {
+        if(Hawk.contains(TOKEN)) Hawk.delete(TOKEN);
+        startActivity(SplashActivity.getNewIntent(this, false));
+        finish();
+    }
 }
