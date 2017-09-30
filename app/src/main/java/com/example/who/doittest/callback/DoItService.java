@@ -1,6 +1,7 @@
 package com.example.who.doittest.callback;
 
 
+import com.example.who.doittest.pojo.ListImages;
 import com.example.who.doittest.pojo.SignUpResponse;
 
 import java.io.File;
@@ -9,6 +10,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -49,8 +51,8 @@ public interface DoItService {
             @Part("longitude") RequestBody longitude
     );
 
-//    @GET("/orgs/{org}")
-//    Call<Organization> getOrganization(@Header("Authorization") String token, @Header("Accept") String accept, @Path("org") String orgname);
+    @GET("/all")
+    Call<ListImages> getAllImages(@Header(TOKEN) String token);
 //
 //    @GET("users/{owner}/repos")
 //    Call<List<Repository>> getRepositories(@Header("Authorization") String token, @Header("Accept") String accept, @Path("owner") String owner);

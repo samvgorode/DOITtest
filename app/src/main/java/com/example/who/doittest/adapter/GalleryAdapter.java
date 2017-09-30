@@ -1,40 +1,46 @@
 package com.example.who.doittest.adapter;
 
+
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.who.doittest.R;
+import com.example.who.doittest.pojo.ImagePojo;
+import com.example.who.doittest.utils.LocationUtils;
+
+import java.util.List;
 
 /**
  * Created by who on 30.09.2017.
  */
 
-public class GalleryAdapter {}
-        /*extends RecyclerView.Adapter<GalleryAdapter.MyViewHolder> {
+public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<Album> albumList;
+    private List<ImagePojo> albumList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, count;
-        public ImageView thumbnail, overflow;
+        public TextView weather, address;
+        public ImageView thumbnail;
 
         public MyViewHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.title);
-            count = (TextView) view.findViewById(R.id.count);
+            weather = (TextView) view.findViewById(R.id.weather);
+            address = (TextView) view.findViewById(R.id.address);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
-            overflow = (ImageView) view.findViewById(R.id.overflow);
         }
     }
 
 
-    public GalleryAdapter(Context mContext, List<Album> albumList) {
+    public GalleryAdapter(Context mContext, List<ImagePojo> imagesList) {
         this.mContext = mContext;
-        this.albumList = albumList;
+        this.albumList = imagesList;
     }
 
     @Override
@@ -47,23 +53,15 @@ public class GalleryAdapter {}
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        Album album = albumList.get(position);
-        holder.title.setText(album.getName());
-        holder.count.setText(album.getNumOfSongs() + " songs");
-
-        // loading album cover using Glide library
-        Glide.with(mContext).load(album.getThumbnail()).into(holder.thumbnail);
-
-        holder.overflow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showPopupMenu(holder.overflow);
-            }
-        });
+        ImagePojo image = albumList.get(position);
+        holder.weather.setText(image.getParameters().getWeather());
+        String address = LocationUtils.getAddress(mContext, image.getParameters().getLatitude(), image.getParameters().getLongitude());
+        holder.address.setText(address);
+        Glide.with(mContext).load(image.getSmallImagePath()).into(holder.thumbnail);
     }
 
     @Override
     public int getItemCount() {
         return albumList.size();
     }
-}*/
+}

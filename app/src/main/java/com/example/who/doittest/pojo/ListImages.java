@@ -8,13 +8,13 @@ public class ListImages {
 
     @SerializedName("images")
     @Expose
-    private List<Image> images = null;
+    private List<ImagePojo> images = null;
 
-    public List<Image> getImages() {
+    public List<ImagePojo> getImages() {
         return images;
     }
 
-    public void setImages(List<Image> images) {
+    public void setImages(List<ImagePojo> images) {
         this.images = images;
     }
 }

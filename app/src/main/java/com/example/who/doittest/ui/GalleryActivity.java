@@ -2,23 +2,42 @@ package com.example.who.doittest.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.who.doittest.R;
+import com.example.who.doittest.adapter.GalleryAdapter;
 import com.example.who.doittest.interfaces.IGalleryView;
+import com.example.who.doittest.pojo.ImagePojo;
+import com.example.who.doittest.pojo.ListImages;
+import com.example.who.doittest.presenter.GalleryActivityPresenter;
+import com.example.who.doittest.utils.GridSpacingItemDecoration;
 import com.orhanobut.hawk.Hawk;
 
+import java.util.List;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.example.who.doittest.global.Constants.TOKEN;
 
 public class GalleryActivity extends AppCompatActivity implements IGalleryView, View.OnClickListener {
 
+    @BindView(R.id.rvGallery)
+    public RecyclerView recyclerView;
+
+    private GalleryAdapter adapter;
     private View customBarView;
+    private GalleryActivityPresenter presenter;
 
     public static Intent getNewIntent(Context context) {
         Intent intent = new Intent(context, GalleryActivity.class);
@@ -31,6 +50,8 @@ public class GalleryActivity extends AppCompatActivity implements IGalleryView, 
         setContentView(R.layout.activity_gallery);
         ButterKnife.bind(this);
         setCustomBar();
+        presenter = new GalleryActivityPresenter(GalleryActivity.this, this);
+        presenter.fetchImages();
     }
 
     private void setCustomBar() {
@@ -42,6 +63,26 @@ public class GalleryActivity extends AppCompatActivity implements IGalleryView, 
             customBarView = bar.getCustomView();
             setBarClickListeners();
         }
+    }
+
+    @Override
+    public void setDataToAdapter(List<ImagePojo> albumList) {
+        adapter = new GalleryAdapter(this, albumList);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onFetchImagesSuccess() {
+        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onFetchImagesFailure() {
+        Toast.makeText(this, "Not Success", Toast.LENGTH_SHORT).show();
     }
 
     private void setBarClickListeners() {
@@ -93,5 +134,10 @@ public class GalleryActivity extends AppCompatActivity implements IGalleryView, 
         if(Hawk.contains(TOKEN)) Hawk.delete(TOKEN);
         startActivity(SplashActivity.getNewIntent(this, false));
         finish();
+    }
+
+    private int dpToPx(int dp) {
+        Resources r = getResources();
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 }

@@ -29,6 +29,8 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import pugman.com.simplelocationgetter.SimpleLocationGetter;
 
+import static com.example.who.doittest.utils.LocationUtils.askForGps;
+
 public class AddImageActivity extends AppCompatActivity implements IAddImageView, SimpleLocationGetter.OnLocationGetListener {
 
     @BindView(R.id.etDescription)
@@ -61,6 +63,7 @@ public class AddImageActivity extends AppCompatActivity implements IAddImageView
         super.onResume();
         setStorageEnabled();
         PermissionUtils.checkLocationPermissions(this);
+        askForGps(this);
         SimpleLocationGetter getter = new SimpleLocationGetter(this, this);
         getter.getLastLocation();
     }

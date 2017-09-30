@@ -3,7 +3,7 @@ package com.example.who.doittest.pojo;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Image {
+public class ImagePojo {
 
     @SerializedName("id")
     @Expose

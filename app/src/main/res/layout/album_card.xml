@@ -25,7 +25,7 @@
                 android:scaleType="fitXY" />
 
             <TextView
-                android:id="@+id/title"
+                android:id="@+id/weather"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/thumbnail"
@@ -33,16 +33,19 @@
                 android:paddingRight="@dimen/album_title_padding"
                 android:paddingTop="@dimen/album_title_padding"
                 android:textColor="@color/album_title"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:textSize="@dimen/album_title" />
 
             <TextView
-                android:id="@+id/count"
+                android:id="@+id/address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/title"
+                android:layout_below="@id/weather"
                 android:paddingBottom="@dimen/songs_count_padding_bottom"
                 android:paddingLeft="@dimen/album_title_padding"
                 android:paddingRight="@dimen/album_title_padding"
+                android:layout_margin="10dp"
                 android:textSize="@dimen/songs_count" />
         </RelativeLayout>
 

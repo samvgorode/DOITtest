@@ -124,6 +124,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
     @Override
     public void onLoginSuccess() {
+        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
         loginButton.setEnabled(true);
         startActivity(GalleryActivity.getNewIntent(this));
         finish();

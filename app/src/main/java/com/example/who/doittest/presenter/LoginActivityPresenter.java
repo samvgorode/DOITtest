@@ -37,17 +37,14 @@ public class LoginActivityPresenter {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     view.onLoginSuccess();
-                    Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
                 } else {
                     view.onLoginFailed();
-                    Toast.makeText(context, "Not Success", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 view.onLoginFailed();
-                Toast.makeText(context, "Failure", Toast.LENGTH_SHORT).show();
             }
         });
     }
