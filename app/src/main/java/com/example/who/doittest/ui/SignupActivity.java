@@ -32,11 +32,11 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
+import static com.example.who.doittest.global.Constants.IMG;
 import static com.example.who.doittest.global.Constants.TXT_PLAIN;
 
 public class SignupActivity extends AppCompatActivity implements ISignupView {
 
-    private static final String IMG = "image/*";
     @BindView(R.id.input_name)
     EditText nameText;
     @BindView(R.id.avatar)
@@ -102,7 +102,7 @@ public class SignupActivity extends AppCompatActivity implements ISignupView {
             final RequestBody emailBody = RequestBody.create(okhttp3.MediaType.parse(TXT_PLAIN), email);
             final RequestBody passwordBody = RequestBody.create(okhttp3.MediaType.parse(TXT_PLAIN), password);
             File file = new File(imageUri.getPath());
-            final MultipartBody.Part body = MultipartBody.Part.createFormData("avatar", file.getName().trim(), RequestBody.create(MediaType.parse("image/*"), file));
+            final MultipartBody.Part body = MultipartBody.Part.createFormData("avatar", file.getName().trim(), RequestBody.create(MediaType.parse(IMG), file));
             new android.os.Handler().postDelayed(
                     new Runnable() {
                         public void run() {

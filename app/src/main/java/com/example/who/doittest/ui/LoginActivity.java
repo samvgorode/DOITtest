@@ -77,11 +77,11 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
             final RequestBody emailBody = RequestBody.create(okhttp3.MediaType.parse(TXT_PLAIN), email);
             final RequestBody passwordBody = RequestBody.create(okhttp3.MediaType.parse(TXT_PLAIN), password);
+            progress.setVisibility(View.VISIBLE);
             new android.os.Handler().postDelayed(
                     new Runnable() {
                         public void run() {
                             presenter.loginUser(emailBody, passwordBody);
-                            progress.setVisibility(View.GONE);
                         }
                     }, 3000);
         }
@@ -124,6 +124,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
     @Override
     public void onLoginSuccess() {
+        progress.setVisibility(View.GONE);
         Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
         loginButton.setEnabled(true);
         startActivity(GalleryActivity.getNewIntent(this));
@@ -132,6 +133,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
     @Override
     public void onLoginFailed() {
+        progress.setVisibility(View.GONE);
         Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
         loginButton.setEnabled(true);
     }

@@ -14,6 +14,17 @@ public class Parameters {
     @SerializedName("weather")
     @Expose
     private String weather;
+    @SerializedName("address")
+    @Expose
+    private String address;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public Float getLongitude() {
         return longitude;

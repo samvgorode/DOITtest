@@ -47,7 +47,7 @@ public class LocationUtils {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                     context, R.style.MyDialogTheme);
             alertDialogBuilder
-                    .setMessage("GPS is disabled in your device. Enable it?")
+                    .setMessage("Could you please enable your GPS?")
                     .setCancelable(false)
                     .setPositiveButton("Enable GPS",
                             new DialogInterface.OnClickListener() {

@@ -1,52 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.who.doittest.ui.AddImageActivity">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fitsSystemWindows="true">
+
     <RelativeLayout
-        android:id="@+id/rlPlaceholder"
-        android:layout_height="200dp"
         android:layout_width="match_parent"
-        android:layout_margin="30dp"
-        android:background="@color/primary_dark">
-        <ImageView
-            android:id="@+id/ivPlaceholder"
-            android:layout_height="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/rlPlaceholder"
             android:layout_width="match_parent"
-            android:layout_margin="15dp"
-            android:src="@drawable/placeholder"
-            android:layout_centerInParent="true"/>
+            android:layout_height="200dp"
+            android:layout_margin="30dp"
+            android:background="@color/primary_dark">
+
+            <ImageView
+                android:id="@+id/ivPlaceholder"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_margin="15dp"
+                android:src="@drawable/placeholder" />
+        </RelativeLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/tiDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rlPlaceholder"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp">
+
+            <EditText
+                android:id="@+id/etDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/description"
+                android:inputType="text" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/itHashtag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tiDescription"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp">
+
+            <EditText
+                android:id="@+id/etHashtag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hashtag"
+                android:inputType="text" />
+        </android.support.design.widget.TextInputLayout>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
     </RelativeLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/tiDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/rlPlaceholder">
-        <EditText android:id="@+id/etDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:hint="@string/description"/>
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/itHashtag"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/tiDescription">
-        <EditText android:id="@+id/etHashtag"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:hint="@string/hashtag"/>
-    </android.support.design.widget.TextInputLayout>
-
-</RelativeLayout>
+</ScrollView>

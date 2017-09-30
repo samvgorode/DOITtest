@@ -3,6 +3,7 @@ package com.example.who.doittest.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +56,10 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         ImagePojo image = albumList.get(position);
         holder.weather.setText(image.getParameters().getWeather());
-        String address = LocationUtils.getAddress(mContext, image.getParameters().getLatitude(), image.getParameters().getLongitude());
+        String address = "";
+        if (TextUtils.isEmpty(image.getParameters().getAddress()))
+            address = LocationUtils.getAddress(mContext, image.getParameters().getLatitude(), image.getParameters().getLongitude());
+        else address = image.getParameters().getAddress();
         holder.address.setText(address);
         Glide.with(mContext).load(image.getSmallImagePath()).into(holder.thumbnail);
     }

@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.who.doittest.R;
@@ -29,6 +31,8 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import pugman.com.simplelocationgetter.SimpleLocationGetter;
 
+import static com.example.who.doittest.global.Constants.IMG;
+import static com.example.who.doittest.global.Constants.TXT_PLAIN;
 import static com.example.who.doittest.utils.LocationUtils.askForGps;
 
 public class AddImageActivity extends AppCompatActivity implements IAddImageView, SimpleLocationGetter.OnLocationGetListener {
@@ -39,6 +43,8 @@ public class AddImageActivity extends AppCompatActivity implements IAddImageView
     EditText etHashtag;
     @BindView(R.id.ivPlaceholder)
     ImageView ivPlaceholder;
+    @BindView(R.id.progress)
+    ProgressBar progress;
 
     private AddImageActivityPresenter presenter;
     private Uri imageUri;
@@ -86,12 +92,15 @@ public class AddImageActivity extends AppCompatActivity implements IAddImageView
     }
 
     private void addNewImage() {
-        MultipartBody.Part body = null;
-        float latitude = 0.0f;
-        float longitude = 0.0f;
         if (imageUri != null) {
+            float latitude = 0.0f;
+            float longitude = 0.0f;
             File file = new File(imageUri.getPath());
-            body = MultipartBody.Part.createFormData("avatar", file.getName().trim(), RequestBody.create(MediaType.parse("image/*"), file));
+            final MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName().trim(), RequestBody.create(MediaType.parse(IMG), file));
+            String description = etDescription.getText().toString();
+            final RequestBody descriptionBody = RequestBody.create(okhttp3.MediaType.parse(TXT_PLAIN), description);
+            String hashtag = etHashtag.getText().toString();
+            final RequestBody hashtagBody = RequestBody.create(okhttp3.MediaType.parse(TXT_PLAIN), hashtag);
             if (myLocation != null) {
                 latitude = (float) myLocation.getLatitude();
                 longitude = (float) myLocation.getLongitude();
@@ -104,8 +113,15 @@ public class AddImageActivity extends AppCompatActivity implements IAddImageView
                     e.printStackTrace();
                 }
             }
-            String description = etDescription.getText().toString();
-            String hashtag = etHashtag.getText().toString();
+            final RequestBody latBody = RequestBody.create(okhttp3.MediaType.parse(TXT_PLAIN), String.valueOf(latitude));
+            final RequestBody lonBody = RequestBody.create(okhttp3.MediaType.parse(TXT_PLAIN), String.valueOf(longitude));
+            progress.setVisibility(View.VISIBLE);
+            new android.os.Handler().postDelayed(
+                    new Runnable() {
+                        public void run() {
+                            presenter.addNewImage(body, descriptionBody, hashtagBody, latBody, lonBody);
+                        }
+                    }, 3000);
 
         }
     }
@@ -140,12 +156,16 @@ public class AddImageActivity extends AppCompatActivity implements IAddImageView
 
     @Override
     public void onAddImageSuccess() {
-
+        progress.setVisibility(View.GONE);
+        Toast.makeText(this, "Add image success", Toast.LENGTH_LONG).show();
+        startActivity(GalleryActivity.getNewIntent(this));
+        finish();
     }
 
     @Override
     public void onAddImageFailure() {
-
+        progress.setVisibility(View.GONE);
+        Toast.makeText(this, "Add image failure, try another one", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -155,7 +175,5 @@ public class AddImageActivity extends AppCompatActivity implements IAddImageView
 
     //SimpleLocationGetter.OnLocationGetListener
     @Override
-    public void onError(String s) {
-
-    }
+    public void onError(String s) {}
 }

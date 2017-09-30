@@ -1,26 +1,34 @@
 package com.example.who.doittest.ui;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.who.doittest.R;
 import com.example.who.doittest.adapter.GalleryAdapter;
 import com.example.who.doittest.interfaces.IGalleryView;
 import com.example.who.doittest.pojo.ImagePojo;
-import com.example.who.doittest.pojo.ListImages;
 import com.example.who.doittest.presenter.GalleryActivityPresenter;
 import com.example.who.doittest.utils.GridSpacingItemDecoration;
+import com.medialablk.easygifview.EasyGifView;
 import com.orhanobut.hawk.Hawk;
 
 import java.util.List;
@@ -34,6 +42,8 @@ public class GalleryActivity extends AppCompatActivity implements IGalleryView, 
 
     @BindView(R.id.rvGallery)
     public RecyclerView recyclerView;
+    @BindView(R.id.progress)
+    ProgressBar progress;
 
     private GalleryAdapter adapter;
     private View customBarView;
@@ -51,7 +61,18 @@ public class GalleryActivity extends AppCompatActivity implements IGalleryView, 
         ButterKnife.bind(this);
         setCustomBar();
         presenter = new GalleryActivityPresenter(GalleryActivity.this, this);
-        presenter.fetchImages();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        progress.setVisibility(View.VISIBLE);
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        presenter.fetchImages();
+                    }
+                }, 1500);
     }
 
     private void setCustomBar() {
@@ -77,12 +98,24 @@ public class GalleryActivity extends AppCompatActivity implements IGalleryView, 
 
     @Override
     public void onFetchImagesSuccess() {
+        progress.setVisibility(View.GONE);
         Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onFetchImagesFailure() {
+        progress.setVisibility(View.GONE);
         Toast.makeText(this, "Not Success", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showGif(final String url) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        WebView view = new WebView(this);
+        view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        builder.setView(view);
+        builder.create().show();
+        view.loadUrl(url);
     }
 
     private void setBarClickListeners() {
@@ -103,7 +136,7 @@ public class GalleryActivity extends AppCompatActivity implements IGalleryView, 
                 break;
 
             case R.id.ivDoGif:
-                showGif();
+                getGif();
                 break;
 
             case R.id.ivLogOut:
@@ -119,8 +152,14 @@ public class GalleryActivity extends AppCompatActivity implements IGalleryView, 
         startActivity(AddImageActivity.getNewIntent(this));
     }
 
-    void showGif() {
-
+    void getGif() {
+        progress.setVisibility(View.VISIBLE);
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        presenter.showGif();
+                    }
+                }, 2000);
     }
 
     @Override
@@ -131,7 +170,7 @@ public class GalleryActivity extends AppCompatActivity implements IGalleryView, 
     }
 
     private void doLogOut() {
-        if(Hawk.contains(TOKEN)) Hawk.delete(TOKEN);
+        if (Hawk.contains(TOKEN)) Hawk.delete(TOKEN);
         startActivity(SplashActivity.getNewIntent(this, false));
         finish();
     }
