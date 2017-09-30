@@ -17,4 +17,6 @@ public interface IGalleryView {
     void onFetchImagesFailure();
 
     void showGif(String url);
+
+    void noImages();
 }

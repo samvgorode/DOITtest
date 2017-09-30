@@ -29,7 +29,8 @@ public class GalleryActivityPresenter {
     private Call<ListImages> allImagesCall;
     private Call<GifResponse> gifCall;
     private RestManager restManager;
-    private String token = "";;
+    private String token = "";
+    ;
 
     public GalleryActivityPresenter(Context context, IGalleryView view) {
         this.context = context;
@@ -51,7 +52,7 @@ public class GalleryActivityPresenter {
                         if (listImages.size() > 0)
                             view.setDataToAdapter(listImages);
                     }
-                } else view.onFetchImagesFailure();
+                } else view.noImages();
             }
 
             @Override
@@ -66,19 +67,18 @@ public class GalleryActivityPresenter {
         gifCall.enqueue(new Callback<GifResponse>() {
             @Override
             public void onResponse(Call<GifResponse> call, Response<GifResponse> response) {
-                if(response.isSuccessful()){
-                    if(response.body()!=null){
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
                         view.onFetchImagesSuccess();
                         String gifUri = response.body().getGif();
                         view.showGif(gifUri);
                     }
-
-                } else view.onFetchImagesFailure();
+                } else view.noImages();
             }
 
             @Override
             public void onFailure(Call<GifResponse> call, Throwable t) {
-
+                view.onFetchImagesFailure();
             }
         });
     }

@@ -44,8 +44,7 @@ public class LoginActivityPresenter {
                         String token = response.body().getToken();
                     if(Hawk.contains(TOKEN)) {
                         Hawk.delete(TOKEN);
-                        Hawk.put(TOKEN, token);
-                    }
+                    } Hawk.put(TOKEN, token);
                     view.onLoginSuccess();}
                 } else {
                     view.onLoginFailed();

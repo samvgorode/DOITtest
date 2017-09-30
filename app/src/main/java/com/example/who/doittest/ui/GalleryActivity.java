@@ -1,7 +1,6 @@
 package com.example.who.doittest.ui;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v7.app.ActionBar;
@@ -12,23 +11,18 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
 import com.example.who.doittest.R;
 import com.example.who.doittest.adapter.GalleryAdapter;
 import com.example.who.doittest.interfaces.IGalleryView;
 import com.example.who.doittest.pojo.ImagePojo;
 import com.example.who.doittest.presenter.GalleryActivityPresenter;
 import com.example.who.doittest.utils.GridSpacingItemDecoration;
-import com.medialablk.easygifview.EasyGifView;
 import com.orhanobut.hawk.Hawk;
 
 import java.util.List;
@@ -112,10 +106,18 @@ public class GalleryActivity extends AppCompatActivity implements IGalleryView, 
     public void showGif(final String url) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         WebView view = new WebView(this);
-        view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(15, 15, 15, 15);
+        view.setLayoutParams(params);
         builder.setView(view);
         builder.create().show();
         view.loadUrl(url);
+    }
+
+    @Override
+    public void noImages() {
+        progress.setVisibility(View.GONE);
+        Toast.makeText(this, "You have no images", Toast.LENGTH_SHORT).show();
     }
 
     private void setBarClickListeners() {
@@ -159,7 +161,7 @@ public class GalleryActivity extends AppCompatActivity implements IGalleryView, 
                     public void run() {
                         presenter.showGif();
                     }
-                }, 2000);
+                }, 1000);
     }
 
     @Override
