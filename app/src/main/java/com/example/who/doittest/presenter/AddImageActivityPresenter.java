@@ -1,22 +1,15 @@
 package com.example.who.doittest.presenter;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
 
 import com.example.who.doittest.controller.RestManager;
 import com.example.who.doittest.interfaces.IAddImageView;
-import com.example.who.doittest.pojo.ImagePojo;
-import com.example.who.doittest.pojo.ListImages;
 import com.example.who.doittest.utils.FileUtils;
 import com.example.who.doittest.utils.PermissionUtils;
 import com.orhanobut.hawk.Hawk;
-
-import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -62,20 +55,24 @@ public class AddImageActivityPresenter {
         } else view.setStorageEnabled();
     }
 
-    public void addNewImage(MultipartBody.Part image, RequestBody description, RequestBody hashtag, RequestBody latitude, RequestBody longitude){
+    public void addNewImage(MultipartBody.Part image, RequestBody description, RequestBody hashtag, RequestBody latitude, RequestBody longitude) {
         String token = "";
         if (Hawk.contains(TOKEN)) token = Hawk.get(TOKEN);
         postImageCall = manager.getDoItService().postNewImage(token, image, description, hashtag, latitude, longitude);
         postImageCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()) view.onAddImageSuccess();
-                else view.onAddImageFailure();
+                if (response.isSuccessful()) view.onAddImageSuccess();
+                else {
+                    if (response.code() == 400) {
+                        view.onAddImageFailure("Bad request");
+                    }
+                }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                view.onAddImageFailure();
+                view.onAddImageFailure(t.getLocalizedMessage());
             }
         });
     }

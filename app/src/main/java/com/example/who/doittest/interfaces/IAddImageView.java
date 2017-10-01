@@ -11,7 +11,7 @@ public interface IAddImageView {
 
     void onAddImageSuccess();
 
-    void onAddImageFailure();
+    void onAddImageFailure(String what);
 
     void takePhoto(Intent intent, int i);
 

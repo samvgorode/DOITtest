@@ -54,7 +54,7 @@ public class SplashActivity extends AppCompatActivity {
                 public void run() {
                     SplashActivity.this.finish();
                 }
-            }, 3000);
+            }, 2000);
         }
     }
 

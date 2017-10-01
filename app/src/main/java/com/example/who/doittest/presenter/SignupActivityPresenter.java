@@ -77,14 +77,15 @@ public class SignupActivityPresenter {
                     if (!TextUtils.isEmpty(token)) Hawk.put(TOKEN, token.trim());
                     view.onSignupSuccess();
                 } else {
-                    view.onSignupFailed();
+                    if (response.code() == 400) {
+                        view.onSignupFailed("Bad request");
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<SignUpResponse> call, Throwable t) {
-                view.onSignupFailed();
-                Toast.makeText(context, "Failure", Toast.LENGTH_SHORT).show();
+                view.onSignupFailed(t.getLocalizedMessage());
             }
         });
     }

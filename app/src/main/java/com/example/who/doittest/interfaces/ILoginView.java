@@ -8,5 +8,5 @@ public interface ILoginView {
 
     void onLoginSuccess();
 
-    void onLoginFailed();
+    void onLoginFailed(String why);
 }

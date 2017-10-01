@@ -17,5 +17,5 @@ public interface ISignupView {
 
     void onSignupSuccess();
 
-    void onSignupFailed();
+    void onSignupFailed(String why);
 }

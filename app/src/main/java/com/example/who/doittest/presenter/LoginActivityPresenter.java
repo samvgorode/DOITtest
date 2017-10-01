@@ -47,13 +47,15 @@ public class LoginActivityPresenter {
                     } Hawk.put(TOKEN, token);
                     view.onLoginSuccess();}
                 } else {
-                    view.onLoginFailed();
+                    if (response.code() == 400) {
+                        view.onLoginFailed("Bad request");
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-                view.onLoginFailed();
+                view.onLoginFailed(t.getLocalizedMessage());
             }
         });
     }

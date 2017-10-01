@@ -12,4 +12,9 @@
     <string name="no_account_yet_create_one">No account yet? Create one</string>
     <string name="description">description</string>
     <string name="hashtag">#hashtag</string>
+    <string name="not_valid">not valid data</string>
+    <string name="enter_carrect_email">enter a valid email address</string>
+    <string name="password_hint">between 4 and 10 alphanumeric characters</string>
+    <string name="login_success">Login success</string>
+    <string name="signup_success">Signup success</string>
 </resources>

@@ -121,7 +121,7 @@ public class AddImageActivity extends AppCompatActivity implements IAddImageView
                         public void run() {
                             presenter.addNewImage(body, descriptionBody, hashtagBody, latBody, lonBody);
                         }
-                    }, 3000);
+                    }, 1500);
 
         }
     }
@@ -163,9 +163,9 @@ public class AddImageActivity extends AppCompatActivity implements IAddImageView
     }
 
     @Override
-    public void onAddImageFailure() {
+    public void onAddImageFailure(String what) {
         progress.setVisibility(View.GONE);
-        Toast.makeText(this, "Add image failure, try another one", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, what, Toast.LENGTH_LONG).show();
     }
 
     @Override

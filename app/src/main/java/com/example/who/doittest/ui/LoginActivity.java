@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     public void login() {
         Log.d(TAG, "Login");
         if (!validate()) {
-            onLoginFailed();
+            onLoginFailed(getString(R.string.not_valid));
             return;
         }
         loginButton.setEnabled(false);
@@ -83,7 +83,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                         public void run() {
                             presenter.loginUser(emailBody, passwordBody);
                         }
-                    }, 3000);
+                    }, 1500);
         }
     }
 
@@ -107,13 +107,13 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailText.setError("enter a valid email address");
+            emailText.setError(getString(R.string.enter_carrect_email));
             valid = false;
         } else {
             emailText.setError(null);
         }
         if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            passwordText.setError("between 4 and 10 alphanumeric characters");
+            passwordText.setError(getString(R.string.password_hint));
             valid = false;
         } else {
             passwordText.setError(null);
@@ -125,16 +125,16 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     @Override
     public void onLoginSuccess() {
         progress.setVisibility(View.GONE);
-        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.login_success, Toast.LENGTH_SHORT).show();
         loginButton.setEnabled(true);
         startActivity(GalleryActivity.getNewIntent(this));
         finish();
     }
 
     @Override
-    public void onLoginFailed() {
+    public void onLoginFailed(String why) {
         progress.setVisibility(View.GONE);
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), why, Toast.LENGTH_LONG).show();
         loginButton.setEnabled(true);
     }
 }

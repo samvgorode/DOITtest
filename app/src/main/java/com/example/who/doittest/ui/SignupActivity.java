@@ -89,7 +89,7 @@ public class SignupActivity extends AppCompatActivity implements ISignupView {
     public void signup() {
         Log.d(TAG, "Signup");
         if (!validate()) {
-            onSignupFailed();
+            onSignupFailed(getString(R.string.not_valid));
             return;
         }
         signupButton.setEnabled(false);
@@ -109,21 +109,21 @@ public class SignupActivity extends AppCompatActivity implements ISignupView {
                             presenter.registerUser(nameBody, emailBody, passwordBody, body);
                             progress.setVisibility(View.GONE);
                         }
-                    }, 3000);
+                    }, 1500);
         }
     }
 
     @Override
     public void onSignupSuccess() {
         signupButton.setEnabled(true);
-        Toast.makeText(this, "Login success", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.signup_success, Toast.LENGTH_LONG).show();
         setResult(RESULT_OK, null);
         finish();
     }
 
     @Override
-    public void onSignupFailed() {
-        Toast.makeText(this, "Login failed", Toast.LENGTH_LONG).show();
+    public void onSignupFailed(String why) {
+        Toast.makeText(this, why, Toast.LENGTH_LONG).show();
         signupButton.setEnabled(true);
     }
 
