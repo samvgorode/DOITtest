@@ -2,10 +2,16 @@ package com.example.who.doittest.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.webkit.WebView;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 import com.example.who.doittest.R;
+import com.example.who.doittest.utils.GifUtils;
 import com.orhanobut.hawk.Hawk;
 
 import butterknife.BindView;
@@ -14,9 +20,6 @@ import butterknife.ButterKnife;
 import static com.example.who.doittest.global.Constants.TOKEN;
 
 public class SplashActivity extends AppCompatActivity {
-
-    @BindView(R.id.ivAnimation)
-    com.medialablk.easygifview.EasyGifView ivAnimation;
 
     private static final String EXIT = "EXIT";
     private Handler handler = new Handler();
@@ -36,12 +39,7 @@ public class SplashActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         if (getSupportActionBar() != null)
             getSupportActionBar().hide();
-        setAnimation();
         fetchIntent();
-    }
-
-    private void setAnimation() {
-        ivAnimation.setGifFromResource(R.raw.giphy);
     }
 
     private void fetchIntent() {

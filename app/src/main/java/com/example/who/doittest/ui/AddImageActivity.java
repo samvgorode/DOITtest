@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.example.who.doittest.R;
 import com.example.who.doittest.interfaces.IAddImageView;
 import com.example.who.doittest.presenter.AddImageActivityPresenter;
+import com.example.who.doittest.utils.FileUtils;
 import com.example.who.doittest.utils.PermissionUtils;
 
 import java.io.File;
@@ -147,11 +148,20 @@ public class AddImageActivity extends AppCompatActivity implements IAddImageView
     }
 
     @Override
-    public void updatePlaceholder(Uri uri) {
-        imageUri = uri;
-        Glide.with(this)
-                .load(uri)
-                .into(ivPlaceholder);
+    public void updatePlaceholder(Uri image) {
+        if (image.toString().contains("content")) {
+            String realUri = FileUtils.getRealPathFromUri(this, image);
+            imageUri = Uri.parse(realUri);
+            Glide.with(this)
+                    .load(realUri)
+                    .into(ivPlaceholder);
+
+        } else {
+            imageUri = image;
+            Glide.with(this)
+                    .load(image)
+                    .into(ivPlaceholder);
+        }
     }
 
     @Override
@@ -175,5 +185,6 @@ public class AddImageActivity extends AppCompatActivity implements IAddImageView
 
     //SimpleLocationGetter.OnLocationGetListener
     @Override
-    public void onError(String s) {}
+    public void onError(String s) {
+    }
 }

@@ -27,6 +27,7 @@ import com.example.who.doittest.adapter.GalleryAdapter;
 import com.example.who.doittest.interfaces.IGalleryView;
 import com.example.who.doittest.pojo.ImagePojo;
 import com.example.who.doittest.presenter.GalleryActivityPresenter;
+import com.example.who.doittest.utils.GifUtils;
 import com.example.who.doittest.utils.GridSpacingItemDecoration;
 import com.orhanobut.hawk.Hawk;
 
@@ -109,15 +110,7 @@ public class GalleryActivity extends AppCompatActivity implements IGalleryView, 
 
     @Override
     public void showGif(final String url) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        WebView view = new WebView(this);
-        view.getSettings().setLoadWithOverviewMode(true);
-        view.getSettings().setUseWideViewPort(true);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        view.setLayoutParams(params);
-        builder.setView(view);
-        builder.create().show();
-        view.loadUrl(url);
+        GifUtils.showGif(GalleryActivity.this, url);
     }
 
     @Override

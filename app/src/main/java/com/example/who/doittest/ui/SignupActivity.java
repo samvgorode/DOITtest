@@ -1,13 +1,9 @@
 package com.example.who.doittest.ui;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -21,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.example.who.doittest.R;
 import com.example.who.doittest.interfaces.ISignupView;
 import com.example.who.doittest.presenter.SignupActivityPresenter;
+import com.example.who.doittest.utils.FileUtils;
 import com.example.who.doittest.utils.PermissionUtils;
 
 import java.io.File;
@@ -160,10 +157,19 @@ public class SignupActivity extends AppCompatActivity implements ISignupView {
 
     @Override
     public void updateAvatar(Uri image) {
+        if(image.toString().contains("content")){
+            String realUri = FileUtils.getRealPathFromUri(this, image);
+            imageUri = Uri.parse(realUri);
+            Glide.with(this)
+                    .load(realUri)
+                    .into(avatar);
+
+        } else {
         imageUri = image;
         Glide.with(this)
                 .load(image)
                 .into(avatar);
+        }
 
     }
 
