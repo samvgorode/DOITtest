@@ -11,8 +11,8 @@ import android.widget.LinearLayout;
  */
 
 public class GifUtils {
-    private GifUtils() {
-    }
+
+    private GifUtils() {}
 
     public static void showGif(Activity context, String url) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);

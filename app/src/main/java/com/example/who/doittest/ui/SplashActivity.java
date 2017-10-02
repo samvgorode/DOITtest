@@ -2,19 +2,11 @@ package com.example.who.doittest.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.webkit.WebView;
-import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
 import com.example.who.doittest.R;
-import com.example.who.doittest.utils.GifUtils;
 import com.orhanobut.hawk.Hawk;
-
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.example.who.doittest.global.Constants.TOKEN;
@@ -52,7 +44,7 @@ public class SplashActivity extends AppCompatActivity {
                 public void run() {
                     SplashActivity.this.finish();
                 }
-            }, 2000);
+            }, 1000);
         }
     }
 
@@ -66,9 +58,10 @@ public class SplashActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(!Hawk.contains(TOKEN)) startActivity(LoginActivity.getNewIntent(SplashActivity.this));
+                if (!Hawk.contains(TOKEN))
+                    startActivity(LoginActivity.getNewIntent(SplashActivity.this));
                 else startActivity(GalleryActivity.getNewIntent(SplashActivity.this));
             }
-        }, 3000);
+        }, 1000);
     }
 }
